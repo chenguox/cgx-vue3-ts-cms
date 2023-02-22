@@ -1,8 +1,11 @@
 <template>
   <div class="login-panel">
     <h2 class="title">后台管理系统</h2>
+
+    <!-- 中间的 tabs 切换 -->
     <div class="tabs">
       <el-tabs type="border-card" stretch v-model="activeName">
+        <!-- 1. 账号登录的Pane -->
         <el-tab-pane name="account">
           <template #label>
             <div class="label">
@@ -10,8 +13,9 @@
               <span class="text">账号登录</span>
             </div>
           </template>
-          <panel-account></panel-account>
+          <panel-account ref="accountRef" />
         </el-tab-pane>
+        <!-- 2. 手机登录的Pane -->
         <el-tab-pane name="phone">
           <template #label>
             <div class="label">
@@ -41,10 +45,11 @@ import PanelPhone from './panel-phone.vue'
 
 const isRemPwd = ref(true)
 const activeName = ref('account')
+const accountRef = ref<InstanceType<typeof PanelAccount>>()
 
 function handleLoginBtnClick() {
   if (activeName.value === 'account') {
-    console.log('账号登录')
+    accountRef.value?.loginAction()
   } else {
     console.log('手机登录')
   }
