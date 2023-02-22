@@ -23,7 +23,7 @@
               <span class="text">手机登录</span>
             </div>
           </template>
-          <panel-phone></panel-phone>
+          <panel-phone />
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -38,18 +38,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { localCache } from '@/utils/cache'
+import { ref, watch } from 'vue'
 
 import PanelAccount from './panel-account.vue'
 import PanelPhone from './panel-phone.vue'
 
-const isRemPwd = ref(true)
+const isRemPwd = ref<boolean>(localCache.getItem('isRemPwd') ?? false)
+watch(isRemPwd, (newValue) => {
+  localCache.setItem('isRemPwd', newValue)
+})
+
 const activeName = ref('account')
 const accountRef = ref<InstanceType<typeof PanelAccount>>()
 
 function handleLoginBtnClick() {
   if (activeName.value === 'account') {
-    accountRef.value?.loginAction()
+    accountRef.value?.loginAction(isRemPwd.value)
   } else {
     console.log('手机登录')
   }
